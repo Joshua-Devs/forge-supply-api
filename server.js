@@ -25,6 +25,7 @@ app.get('/forge/supply', async (req, res) => {
     // Fetch mint information
     const mintInfo = await getMint(connection, mintAddress);
     const totalSupply = mintInfo.supply;
+    const decimals = mintInfo.decimals;
 
     // Fetch the token accounts associated with the mint authority
     const tokenAccounts = await connection.getTokenAccountsByOwner(mintAuthority, {
@@ -42,10 +43,18 @@ app.get('/forge/supply', async (req, res) => {
     // Calculate circulating supply
     const circulatingSupply = totalSupply - lockedSupply;
 
-    // Convert BigInt to string for JSON response
+    // Convert BigInt to string and format with decimals
+    const divisor = BigInt(10) ** BigInt(decimals);
+
+    function formatSupply(amount) {
+      const whole = amount / divisor;
+      const fraction = amount % divisor;
+      return `${whole.toString()}.${fraction.toString().padStart(decimals, '0')}`;
+    }
+
     res.json({
-      totalSupply: totalSupply.toString(),
-      circulatingSupply: circulatingSupply.toString(),
+      totalSupply: formatSupply(totalSupply),
+      circulatingSupply: formatSupply(circulatingSupply),
     });
   } catch (error) {
     console.error('Error fetching supply information:', error);
