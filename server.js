@@ -3,7 +3,7 @@ const { Connection, PublicKey } = require('@solana/web3.js');
 const { getMint, getAccount } = require('@solana/spl-token');
 const app = express();
 
-// Use dynamic port for Render or fallback to 3000
+// Use the PORT environment variable or default to 3000
 const port = process.env.PORT || 3000;
 
 // Connect to Solana mainnet
@@ -48,6 +48,6 @@ app.get('/forge/supply', async (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
   console.log(`API running at http://localhost:${port}`);
 });
