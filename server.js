@@ -5,8 +5,6 @@ const app = express();
 
 // Use the PORT environment variable provided by Render or default to 3000
 const port = process.env.PORT || 3000;
-
-// Bind to all network interfaces
 const host = '0.0.0.0';
 
 // Connect to Solana mainnet
@@ -15,6 +13,11 @@ const connection = new Connection('https://api.mainnet-beta.solana.com', 'confir
 // Define the mint address and mint authority
 const mintAddress = new PublicKey('2FKq2Bp8u1LbXqk74nSRWV87MXvELTgAHeRHXxHV94hk');
 const mintAuthority = new PublicKey('J6kZJ7pM4tavNJdbv8fyv5VAiRUt4iWiFKBZgMDzhzsR');
+
+// Root route
+app.get('/', (req, res) => {
+  res.send('Welcome to the Forge Supply API. Visit /forge/supply to get token supply data.');
+});
 
 // Define the /forge/supply route
 app.get('/forge/supply', async (req, res) => {
