@@ -2,7 +2,9 @@ const express = require('express');
 const { Connection, PublicKey } = require('@solana/web3.js');
 const { getMint, getAccount } = require('@solana/spl-token');
 const app = express();
-const port = 3000;
+
+// Use dynamic port for Render or fallback to 3000
+const port = process.env.PORT || 3000;
 
 // Connect to Solana mainnet
 const connection = new Connection('https://api.mainnet-beta.solana.com', 'confirmed');
@@ -11,6 +13,7 @@ const connection = new Connection('https://api.mainnet-beta.solana.com', 'confir
 const mintAddress = new PublicKey('2FKq2Bp8u1LbXqk74nSRWV87MXvELTgAHeRHXxHV94hk');
 const mintAuthority = new PublicKey('J6kZJ7pM4tavNJdbv8fyv5VAiRUt4iWiFKBZgMDzhzsR');
 
+// Define the /forge/supply route
 app.get('/forge/supply', async (req, res) => {
   try {
     // Fetch mint information
@@ -44,7 +47,7 @@ app.get('/forge/supply', async (req, res) => {
   }
 });
 
+// Start the server
 app.listen(port, () => {
   console.log(`API running at http://localhost:${port}`);
 });
-
